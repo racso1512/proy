@@ -28,237 +28,294 @@ import javax.swing.table.DefaultTableModel;
  * @author EQUIPO
  */
 public final class CatalogoProduc extends javax.swing.JInternalFrame {
-     private ResultSet datos;
-     private ResultSet marcas;
-     private ResultSet lineas;
-     private ResultSet proveedores;
-     private ResultSet unidades;
-     private int bandera1=0;
-     private int bandera2=0;
-     private int banderaInsert=1;
-     private int banderaUpdate=1;
-     private PreparedStatement ps;
-     private servicio ser;
-     private int bandPais =0;
-     private Calendar cale;
-     DecimalFormat formatoDinero;
-     SimpleDateFormat fechaMysqlJava;
+
+    private ResultSet datos;
+    private ResultSet marcas;
+    private ResultSet lineas;
+    private ResultSet proveedores;
+    private ResultSet unidades;
+    private int bandera1 = 0;
+    private int bandera2 = 0;
+    private int banderaInsert = 1;
+    private int banderaUpdate = 1;
+    private PreparedStatement ps;
+    private servicio ser;
+    private int bandPais = 0;
+    private Calendar cale;
+    DecimalFormat formatoDinero;
+    SimpleDateFormat fechaMysqlJava;
 
     /**
      * Creates new form CatalogoProduc
      */
     public CatalogoProduc() {
-             initComponents();
-             configuracion_ini();
-             estado_botones(0);
-            
+        initComponents();
+        configuracion_ini();
+        estado_elementos(0);
+
     }
-    void estado_botones(int val){
-      if(val==0){
-        serchLinea.setVisible(false);
-        serchProv.setVisible(false);
-        serchMarca.setVisible(false);
-        jTCodProd.setEditable(false);
-        jTCodBarra.setEditable(false);
-        jTDesProd.setEditable(false);
-        jTDesCortaP.setEditable(false);
-        jTCodLin.setEditable(false);
-        jTDesLin.setEditable(false);
-        jTCodProv.setEditable(false);
-        jTDesProv.setEditable(false);
-        jTCodMar.setEditable(false);
-        jTDesMar.setEditable(false);
-        jTUniXPre.setEditable(false);    
-      }
-      if(val == 1){
-        serchLinea.setVisible(true);
-        serchProv.setVisible(true);
-        serchMarca.setVisible(true);
-        jTCodProd.setEditable(true);
-        jTCodBarra.setEditable(true);
-        jTDesProd.setEditable(true);
-        jTDesCortaP.setEditable(true);
-        jTCodLin.setEditable(true);
-        jTDesLin.setEditable(true);
-        jTCodProv.setEditable(true);
-        jTDesProv.setEditable(true);
-        jTCodMar.setEditable(true);
-        jTDesMar.setEditable(true);
-        jTUniXPre.setEditable(true);     
-          
-         
-      }  
-        
-        
+
+    void estado_elementos(int val) {
+        if (val == 0) {
+            serchLinea.setVisible(false);
+            serchProv.setVisible(false);
+            serchMarca.setVisible(false);
+            jTCodProd.setEditable(false);
+            jTCodBarra.setEditable(false);
+            jTDesProd.setEditable(false);
+            jTDesCortaP.setEditable(false);
+            jTCodLin.setEditable(false);
+            jTDesLin.setEditable(false);
+            jTCodProv.setEditable(false);
+            jTDesProv.setEditable(false);
+            jTCodMar.setEditable(false);
+            jTDesMar.setEditable(false);
+            jTUniXPre.setEditable(false);
+            jTPrecioVenta.setEditable(false);
+            jCPerDes.setEnabled(false);
+
+        }
+        if (val == 1) {
+            serchLinea.setVisible(true);
+            serchProv.setVisible(true);
+            serchMarca.setVisible(true);
+            jTCodProd.setEditable(true);
+            jTCodBarra.setEditable(true);
+            jTDesProd.setEditable(true);
+            jTDesCortaP.setEditable(true);
+            jTCodLin.setEditable(true);
+            jTDesLin.setEditable(true);
+            jTCodProv.setEditable(true);
+            jTDesProv.setEditable(true);
+            jTCodMar.setEditable(true);
+            jTDesMar.setEditable(true);
+            jTUniXPre.setEditable(true);
+
+        }
+
     }
-    
-    
-    void configuracion_ini(){   
-             multi.add(jRmulti);
-             multi.add(jRDiv);
-             jRmulti.setSelected(true);
-             ser = new servicio();
-             formatoDinero = new DecimalFormat("####.00");
-             fechaMysqlJava = new SimpleDateFormat("dd/MM/yyyy");
-             cale = GregorianCalendar.getInstance();
-             Date fecha = cale.getTime();
-             System.out.println(fecha);
-             SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-             System.out.println(formato.format(fecha));
-             
-             
-         try {
-             ps = ser.Querys("SELECT * FROM inmar");
-             marcas = ser.Consultar(ps);
-             ps = ser.Querys("SELECT codlin,deslin from inlin");
-             lineas = ser.Consultar(ps);
-             ps = ser.Querys("SELECT codpro,nomprov from cppro");
-             proveedores = ser.Consultar(ps);
-             ps = ser.Querys("SELECT * from inunidad");
-             unidades = ser.Consultar(ps);
-         } catch (SQLException ex) {
-             Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
-         }
-            
-             
-             
-             JBGrabar.setEnabled(false);
-             JBCancelar.setEnabled(false);
-             
-         try { 
-             
-             ps = ser.Querys("SELECT * FROM inprod");
-             datos = ser.Consultar(ps);
-             if(datos.next()){
-                 llenar_campos();  
-                 llenar_tabla();
-             }
-         } catch (SQLException ex) {
-             Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
-         }    
+
+    void configuracion_ini() {
+        multi.add(jRmulti);
+        multi.add(jRDiv);
+        jRmulti.setSelected(true);
+        ser = new servicio();
+        formatoDinero = new DecimalFormat("####.00");
+        fechaMysqlJava = new SimpleDateFormat("dd/MM/yyyy");
+        cale = GregorianCalendar.getInstance();
+        Date fecha = cale.getTime();
+        System.out.println(fecha);
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(formato.format(fecha));
+
+        try {
+            ps = ser.Querys("SELECT * FROM inmar");
+            marcas = ser.Consultar(ps);
+            marcas.first();
+            ps = ser.Querys("SELECT codlin,deslin from inlin");
+            lineas = ser.Consultar(ps);
+            lineas.first();
+            ps = ser.Querys("SELECT codpro,nomprov from cppro");
+            proveedores = ser.Consultar(ps);
+            proveedores.first();
+            ps = ser.Querys("SELECT * from inunidad");
+            unidades = ser.Consultar(ps);
+            unidades.first();
+        } catch (SQLException ex) {
+            Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        JBGrabar.setEnabled(false);
+        JBCancelar.setEnabled(false);
+
+        try {
+
+            ps = ser.Querys("SELECT * FROM inprod");
+            datos = ser.Consultar(ps);
+            if (datos.first()) {
+                llenar_campos();
+                llenar_tabla();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    
-    
-    void llenar_tabla() throws SQLException{
+
+    void llenar_tabla() throws SQLException {
         DefaultTableModel dtm = new DefaultTableModel();
         String desmedida = null;
         JTable tabla = this.jTable5;
         tabla.setModel(dtm);
-        dtm.setColumnIdentifiers(new Object[]{"código","Descripción","Unidad de medida","Precio de venta"});
+        dtm.setColumnIdentifiers(new Object[]{"código", "Descripción", "Unidad de medida", "Precio de venta"});
         datos.first();
-        if(unidades.getString("codunidad").equals(datos.getString("coduni"))){
-          desmedida =  unidades.getString("desunidad");
-          unidades.first();
-        }else{
-        while(unidades.next()){
-                    if(datos.getString("coduni").equals(unidades.getString("codunidad"))){
-                      desmedida =  unidades.getString("desunidad");
-                      unidades.first();
-                      break;
-                    }      
+        if (unidades.getString("codunidad").equals(datos.getString("coduni"))) {
+            desmedida = unidades.getString("desunidad");
+            unidades.first();
+        } else {
+            while (unidades.next()) {
+                if (datos.getString("coduni").equals(unidades.getString("codunidad"))) {
+                    desmedida = unidades.getString("desunidad");
+                    unidades.first();
+                    break;
                 }
+            }
         }
-        dtm.addRow(new Object[]{datos.getString("codprod"),datos.getString("desprod"),desmedida,"$"+formatoDinero.format(datos.getFloat("preciovta"))});
-       while(datos.next()){
-           if(unidades.getString("codunidad").equals(datos.getString("coduni"))){
-          desmedida =  unidades.getString("desunidad");
-          unidades.first();
-        }else{
-        while(unidades.next()){
-                    if(datos.getString("coduni").equals(unidades.getString("codunidad"))){
-                      desmedida =  unidades.getString("desunidad");
-                      unidades.first();
-                      break;
-                    }      
+        dtm.addRow(new Object[]{datos.getString("codprod"), datos.getString("desprod"), desmedida, "$" + formatoDinero.format(datos.getFloat("preciovta"))});
+        while (datos.next()) {
+            if (unidades.getString("codunidad").equals(datos.getString("coduni"))) {
+                desmedida = unidades.getString("desunidad");
+                unidades.first();
+            } else {
+                while (unidades.next()) {
+                    if (datos.getString("coduni").equals(unidades.getString("codunidad"))) {
+                        desmedida = unidades.getString("desunidad");
+                        unidades.first();
+                        break;
+                    }
                 }
+            }
+            dtm.addRow(new Object[]{datos.getString("codprod"), datos.getString("desprod"), desmedida, "$" + formatoDinero.format(datos.getFloat("preciovta"))});
         }
-        dtm.addRow(new Object[]{datos.getString("codprod"),datos.getString("desprod"),desmedida,"$"+formatoDinero.format(datos.getFloat("preciovta"))});
-       }
-        
+
     }
-    
-    void llenar_campos() throws SQLException{
-        
-         jTCodProd.setText(datos.getString("codprod"));
-                jTDesProd.setText(datos.getString("desprod"));
-                jTDesCortaP.setText(datos.getString("descorta"));
-                jTCodBarra.setText(datos.getString("cbarra"));
-                while(unidades.next()){
-                    if(datos.getString("coduni").equals(unidades.getString("codunidad"))){
-                      jCPresentacion.removeAllItems();
-                      jCPresentacion.addItem(unidades.getString("desunidad"));
-                      unidades.first();
-                      break;
-                    }      
+
+    void llenar_campos() throws SQLException {
+
+        jTCodProd.setText(datos.getString("codprod"));
+        jTDesProd.setText(datos.getString("desprod"));
+        jTDesCortaP.setText(datos.getString("descorta"));
+        jTCodBarra.setText(datos.getString("cbarra"));
+        if (unidades.getString("codunidad").equals(datos.getString("coduni"))) {
+            jCPresentacion.removeAllItems();
+            jCPresentacion.addItem(unidades.getString("desunidad"));
+            unidades.first();
+        } else {
+            while (unidades.next()) {
+                if (datos.getString("coduni").equals(unidades.getString("codunidad"))) {
+                    jCPresentacion.removeAllItems();
+                    jCPresentacion.addItem(unidades.getString("desunidad"));
+                    unidades.first();
+                    break;
                 }
-                jTCodLin.setText(datos.getString("codlin"));
-                while(lineas.next()){
-                    if(datos.getString("codlin").equals(lineas.getString("codlin"))){
-                        jTDesLin.setText(lineas.getString("deslin"));
-                        lineas.first();
-                        break;
-                    }  
+            }
+        }
+        jTCodLin.setText(datos.getString("codlin"));
+        if (datos.getString("codlin").equals(lineas.getString("codlin"))) {
+            jTDesLin.setText(lineas.getString("deslin"));
+            lineas.first();
+        } else {
+            while (lineas.next()) {
+                if (datos.getString("codlin").equals(lineas.getString("codlin"))) {
+                    jTDesLin.setText(lineas.getString("deslin"));
+                    lineas.first();
+                    break;
                 }
-                jTCodProv.setText(datos.getString("codprov"));
-                while(proveedores.next()){
-                    if(datos.getString("codprov").equals(proveedores.getString("codpro"))){
-                        jTDesProv.setText(proveedores.getString("nomprov"));
-                        proveedores.first();
-                        break;
-                    }  
+            }
+        }
+        jTCodProv.setText(datos.getString("codprov"));
+        if (datos.getString("codprov").equals(proveedores.getString("codpro"))) {
+            jTDesProv.setText(proveedores.getString("nomprov"));
+            proveedores.first();
+        } else {
+            while (proveedores.next()) {
+                if (datos.getString("codprov").equals(proveedores.getString("codpro"))) {
+                    jTDesProv.setText(proveedores.getString("nomprov"));
+                    proveedores.first();
+                    break;
                 }
-                jTCodMar.setText(datos.getString("codmar"));
-                while(marcas.next()){
-                    if(datos.getString("codmar").equals(marcas.getString("codmar"))){
-                        jTDesMar.setText(marcas.getString("desmar"));
-                        marcas.first();
-                        break;
-                    }  
+            }
+        }
+        jTCodMar.setText(datos.getString("codmar"));
+        if (datos.getString("codmar").equals(marcas.getString("codmar"))) {
+            jTDesMar.setText(marcas.getString("desmar"));
+            marcas.first();
+        } else {
+            while (marcas.next()) {
+                if (datos.getString("codmar").equals(marcas.getString("codmar"))) {
+                    jTDesMar.setText(marcas.getString("desmar"));
+                    marcas.first();
+                    break;
                 }
-                jTUniXPre.setText(formatoDinero.format(datos.getFloat("unixpre")));
-                Date fecha1 = datos.getDate("fechaing");
-                fechaIngreso.setText(fechaMysqlJava.format(fecha1));
-                jTValorDescuento.setText(formatoDinero.format(datos.getFloat("valdes")));
-                jTPrecioVenta.setText("$"+formatoDinero.format(datos.getFloat("preciovta")));
-                jTMin.setText(formatoDinero.format(datos.getInt("eximin")));
-                jTMax.setText(formatoDinero.format(datos.getInt("eximax")));
-                jTReorden.setText(formatoDinero.format(datos.getFloat("reorden")));
-                if(datos.getBoolean("exento")==true) jCExento.setSelected(true);
-                else jCExento.setSelected(false);
-                jTPorcUtil.setText(formatoDinero.format(datos.getFloat("porcenutil"))+"%");
-                if(datos.getBoolean("obsoleto")== true) jCDescontinuado.setSelected(true);
-                else jCDescontinuado.setSelected(true);
-                jTComision.setText(formatoDinero.format(datos.getFloat("porcomi"))+"%");
-                if(datos.getBoolean("aplides")==true) jCPerDes.setSelected(true);
-                else jCPerDes.setSelected(true);
-                jTImpuesto.setText(formatoDinero.format(datos.getFloat("impuesto"))+"%");  
-                jTABC.setText(datos.getString("clasifica"));
-                if(datos.getBoolean("aplicaret")== true)jCApliRet.setSelected(true);
-                else jCApliRet.setSelected(false);
-                if (datos.getBoolean("noinventa")==true) jCOmiInven.setSelected(true);
-                else jCOmiInven.setSelected(false);   
-                if(datos.getBoolean("promocion")==true) jCPromocional.setSelected(true);
-                else jCPromocional.setSelected(false);
-                jTDiasVen.setText(Integer.toString(datos.getInt("diasven")));
-                if(datos.getBoolean("ctrlxlote")==true) jcCtrlLote.setSelected(true);
-                else jcCtrlLote.setSelected(false);
-                if(datos.getBoolean("preciovar")==true)jCVariable.setSelected(true);
-                else jCVariable.setSelected(true);
-                if(datos.getBoolean("modican")==true) jCModificar.setSelected(true);
-                else jCModificar.setSelected(false);
-                if(datos.getBoolean("nosuj")==true) jCNoSujeto.setSelected(true);
-                else jCNoSujeto.setSelected(false);
-                jTCostDig.setText(formatoDinero.format(datos.getFloat("costodig")));
-                if(datos.getBoolean("aplipro")==true) jCNoPromo.setSelected(true);
-                else jCNoPromo.setSelected(false);
-                if(datos.getBoolean("veriexi")==true) jCFacSinExi.setSelected(true);
-                else jCFacSinExi.setSelected(true);
-                jTPordes.setText(formatoDinero.format(datos.getFloat("pordes"))+"%");
-                
-                
-        
+            }
+        }
+        jTUniXPre.setText(formatoDinero.format(datos.getFloat("unixpre")));
+        Date fecha1 = datos.getDate("fechaing");
+        fechaIngreso.setText(fechaMysqlJava.format(fecha1));
+        jTValorDescuento.setText(formatoDinero.format(datos.getFloat("valdes")));
+        jTPrecioVenta.setText("$" + formatoDinero.format(datos.getFloat("preciovta")));
+        jTMin.setText(formatoDinero.format(datos.getInt("eximin")));
+        jTMax.setText(formatoDinero.format(datos.getInt("eximax")));
+        jTReorden.setText(formatoDinero.format(datos.getFloat("reorden")));
+        if (datos.getBoolean("exento") == true) {
+            jCExento.setSelected(true);
+        } else {
+            jCExento.setSelected(false);
+        }
+        jTPorcUtil.setText(formatoDinero.format(datos.getFloat("porcenutil")) + "%");
+        if (datos.getBoolean("obsoleto") == true) {
+            jCDescontinuado.setSelected(true);
+        } else {
+            jCDescontinuado.setSelected(true);
+        }
+        jTComision.setText(formatoDinero.format(datos.getFloat("porcomi")) + "%");
+        if (datos.getBoolean("aplides") == true) {
+            jCPerDes.setSelected(true);
+        } else {
+            jCPerDes.setSelected(true);
+        }
+        jTImpuesto.setText(formatoDinero.format(datos.getFloat("impuesto")) + "%");
+        jTABC.setText(datos.getString("clasifica"));
+        if (datos.getBoolean("aplicaret") == true) {
+            jCApliRet.setSelected(true);
+        } else {
+            jCApliRet.setSelected(false);
+        }
+        if (datos.getBoolean("noinventa") == true) {
+            jCOmiInven.setSelected(true);
+        } else {
+            jCOmiInven.setSelected(false);
+        }
+        if (datos.getBoolean("promocion") == true) {
+            jCPromocional.setSelected(true);
+        } else {
+            jCPromocional.setSelected(false);
+        }
+        jTDiasVen.setText(Integer.toString(datos.getInt("diasven")));
+        if (datos.getBoolean("ctrlxlote") == true) {
+            jcCtrlLote.setSelected(true);
+        } else {
+            jcCtrlLote.setSelected(false);
+        }
+        if (datos.getBoolean("preciovar") == true) {
+            jCVariable.setSelected(true);
+        } else {
+            jCVariable.setSelected(true);
+        }
+        if (datos.getBoolean("modican") == true) {
+            jCModificar.setSelected(true);
+        } else {
+            jCModificar.setSelected(false);
+        }
+        if (datos.getBoolean("nosuj") == true) {
+            jCNoSujeto.setSelected(true);
+        } else {
+            jCNoSujeto.setSelected(false);
+        }
+        jTCostDig.setText(formatoDinero.format(datos.getFloat("costodig")));
+        if (datos.getBoolean("aplipro") == true) {
+            jCNoPromo.setSelected(true);
+        } else {
+            jCNoPromo.setSelected(false);
+        }
+        if (datos.getBoolean("veriexi") == true) {
+            jCFacSinExi.setSelected(true);
+        } else {
+            jCFacSinExi.setSelected(true);
+        }
+        jTPordes.setText(formatoDinero.format(datos.getFloat("pordes")) + "%");
+
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -577,6 +634,11 @@ public final class CatalogoProduc extends javax.swing.JInternalFrame {
         jBEliminar.setText("Eliminar");
 
         jBModificar.setText("Modificar");
+        jBModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBModificarActionPerformed(evt);
+            }
+        });
 
         JBGrabar.setText("Grabar");
 
@@ -1521,7 +1583,7 @@ public final class CatalogoProduc extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCPresentacionActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-      try {
+        try {
             this.setVisible(false);
             this.setClosed(true);
         } catch (PropertyVetoException ex) {
@@ -1530,32 +1592,64 @@ public final class CatalogoProduc extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jBNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNuevoActionPerformed
-      JBGrabar.setEnabled(true);
-      JBCancelar.setEnabled(true);
-      jBInicio.setEnabled(false);
-      jBAnterior.setEnabled(false);
-      jBProximo.setEnabled(false);
-      jBUltimo.setEnabled(false);
-      jBNuevo.setEnabled(false);
-      jBEliminar.setEnabled(false);
-      jBModificar.setEnabled(false);
-      jBBuscar.setEnabled(false);
-      
-      
-      
+        estado_botones(0);
+        estado_elementos(1);
+        borrar_campos();
+
+
     }//GEN-LAST:event_jBNuevoActionPerformed
 
+    void estado_botones(int e) {
+        if (e == 0) {
+            JBGrabar.setEnabled(true);
+            JBCancelar.setEnabled(true);
+            jBInicio.setEnabled(false);
+            jBAnterior.setEnabled(false);
+            jBProximo.setEnabled(false);
+            jBUltimo.setEnabled(false);
+            jBNuevo.setEnabled(false);
+            jBEliminar.setEnabled(false);
+            jBModificar.setEnabled(false);
+            jBBuscar.setEnabled(false);
+        }
+        if (e == 1) {
+            jBInicio.setEnabled(true);
+            jBAnterior.setEnabled(true);
+            jBProximo.setEnabled(true);
+            jBUltimo.setEnabled(true);
+            jBNuevo.setEnabled(true);
+            jBEliminar.setEnabled(true);
+            jBModificar.setEnabled(true);
+            jBBuscar.setEnabled(true);
+            JBGrabar.setEnabled(false);
+            JBCancelar.setEnabled(false);
+        }
+    }
+
+    void borrar_campos() {
+        jTCodProd.setText("");
+        jTCodBarra.setText("");
+        jTDesProd.setText("");
+        jTDesCortaP.setText("");
+        jTCodLin.setText("");
+        jTDesLin.setText("");
+        jTCodProv.setText("");
+        jTDesProv.setText("");
+        jTCodMar.setText("");
+        jTDesMar.setText("");
+        jTUniXPre.setText("");
+        jTPrecioVenta.setText("");
+
+    }
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-      jBInicio.setEnabled(true);
-      jBAnterior.setEnabled(true);
-      jBProximo.setEnabled(true);
-      jBUltimo.setEnabled(true);
-      jBNuevo.setEnabled(true);
-      jBEliminar.setEnabled(true);
-      jBModificar.setEnabled(true);
-      jBBuscar.setEnabled(true);
-      JBGrabar.setEnabled(false);
-      JBCancelar.setEnabled(false);
+        estado_botones(1);
+        estado_elementos(0);
+        try {
+            datos.first();
+            llenar_campos();
+        } catch (SQLException ex) {
+            Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton17ActionPerformed
@@ -1563,12 +1657,12 @@ public final class CatalogoProduc extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton17ActionPerformed
 
     private void jTCodLinKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTCodLinKeyPressed
-        if(evt.getKeyCode()== KeyEvent.VK_F5){
-         Frame f = JOptionPane.getFrameForComponent(this);
- 
-        cataGrupos dialog = new cataGrupos(f, true);
- 
-        dialog.setVisible(true);
+        if (evt.getKeyCode() == KeyEvent.VK_F5) {
+            Frame f = JOptionPane.getFrameForComponent(this);
+
+            cataGrupos dialog = new cataGrupos(f, true);
+
+            dialog.setVisible(true);
         }
 // TODO add your handling code here:
     }//GEN-LAST:event_jTCodLinKeyPressed
@@ -1582,37 +1676,31 @@ public final class CatalogoProduc extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jCExentoActionPerformed
 
     private void jBProximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBProximoActionPerformed
-         try {
-             if(datos.next()){
-                 
-                 
-             } } catch (SQLException ex) {
-             Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        
     }//GEN-LAST:event_jBProximoActionPerformed
 
     private void jBInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInicioActionPerformed
-         try {
-             datos.first();
-             llenar_campos();
-         } catch (SQLException ex) {
-             Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
-         }
-       
+        try {
+            datos.first();
+            llenar_campos();
+        } catch (SQLException ex) {
+            Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_jBInicioActionPerformed
 
     private void jBUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBUltimoActionPerformed
-         try {
-             datos.last();
-             llenar_campos();
-         } catch (SQLException ex) {
-             Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
-         }
-        
+        try {
+            datos.last();
+            llenar_campos();
+        } catch (SQLException ex) {
+            Logger.getLogger(CatalogoProduc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_jBUltimoActionPerformed
 
     private void serchProvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serchProvActionPerformed
-       
+
     }//GEN-LAST:event_serchProvActionPerformed
 
     private void serchMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serchMarcaActionPerformed
@@ -1622,6 +1710,10 @@ public final class CatalogoProduc extends javax.swing.JInternalFrame {
     private void serchLineaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_serchLineaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_serchLineaActionPerformed
+
+    private void jBModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBModificarActionPerformed
+        estado_botones(0);
+    }//GEN-LAST:event_jBModificarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
