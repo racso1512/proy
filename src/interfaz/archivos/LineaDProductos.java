@@ -584,6 +584,7 @@ public class LineaDProductos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBBuscarActionPerformed
 
     private void JBLupaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBLupaActionPerformed
+
         TablaCatePro1 ventanaP= new TablaCatePro1();
         centrarPantallaInternal(ventanaP);
         ventanaP.toFront();
